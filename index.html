@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Sandbox</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="src/styles.css" />
+  </head>
+
+  <body>
+    <form onsubmit="myFun(event)">
+      <div>
+        <label for="taskName">Task Name :</label>
+        <input type="text" placeholder="Task Name" id="taskName" />
+        <label for="description">Description :</label>
+        <input type="text" placeholder="Description" id="description" />
+        <input type="submit" value="submit" />
+      </div>
+    </form>
+    <div>
+      <h2 class="title">Task to be done</h2>
+      <ul class="list-group" id="taskToBeDone"></ul>
+    </div>
+    <div>
+      <h2 class="title">Task done</h2>
+      <ul class="list-group" id="taskDone"></ul>
+    </div>
+
+    <script src="src/index.js"></script>
+    <script>
+      // Function to handle form submission
+      function myFun(event) {
+        event.preventDefault(); // Prevent the form from submitting and refreshing the page
+
+        // Get the input field values
+        var taskName = document.getElementById("taskName").value;
+        var description = document.getElementById("description").value;
+
+        // Create a new list item element
+        var newItem = document.createElement("li");
+        newItem.textContent = taskName + " " + description;
+
+        // Create the 'Done' button
+        var doneButton = document.createElement("button");
+        doneButton.textContent = "Done";
+        doneButton.addEventListener("click", function () {
+          moveToTaskDone(newItem);
+        });
+
+        // Create the 'Delete' button
+        var deleteButton = document.createElement("button");
+        deleteButton.textContent = "Delete";
+        deleteButton.addEventListener("click", function () {
+          deleteTask(newItem);
+        });
+
+        // Append the buttons to the new list item
+        newItem.appendChild(doneButton);
+        newItem.appendChild(deleteButton);
+
+        // Add the new item to the 'Task to be done' list
+        var taskToBeDoneList = document.getElementById("taskToBeDone");
+        taskToBeDoneList.appendChild(newItem);
+
+        // Reset the form
+        document.getElementById("taskName").value = "";
+        document.getElementById("description").value = "";
+      }
+
+      // Function to move task to the 'Task done' list
+      function moveToTaskDone(taskItem) {
+        // Remove the 'Done' button from the task item
+        var doneButton = taskItem.querySelector("button");
+        doneButton.remove();
+
+        // Remove the task item from 'Task to be done' list
+        var taskToBeDoneList = document.getElementById("taskToBeDone");
+        taskToBeDoneList.removeChild(taskItem);
+
+        // Add the task item to the 'Task done' list
+        var taskDoneList = document.getElementById("taskDone");
+        taskDoneList.appendChild(taskItem);
+      }
+
+      // Function to delete a task item
+      function deleteTask(taskItem) {
+        // Remove the task item from its parent list
+        var parentList = taskItem.parentNode;
+        parentList.removeChild(taskItem);
+      }
+    </script>
+  </body>
+</html>
